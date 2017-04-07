@@ -6,8 +6,8 @@ function start(route, handle) {
   function onRequest(req, res) {
     var pathname = url.parse(req.url).pathname
     res.writeHead(200, {'Content-Type': 'text/pain'})
-    res.write(pathname)
-    route(handle, pathname)
+    res.write(route(handle, pathname))
+    res.end()
   }
 
   var server = http.createServer(onRequest)

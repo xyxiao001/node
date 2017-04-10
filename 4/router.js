@@ -1,10 +1,10 @@
-function route(handle, pathname) {
-  console.log('address is ' + pathname)
+function route(handle, pathname, response, postData) {
   if (typeof handle[pathname] === 'function') {
-    return handle[pathname]()
+    handle[pathname](response, postData)
   } else {
     console.log('no request found this ' + pathname)
-    return '404 not Found'
+    response.write('404 not Found')
+    response.end()
   }
 }
 

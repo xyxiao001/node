@@ -3,11 +3,20 @@ var http = require('http')
 var url = require('url')
 
 function start(route, handle) {
-  function onRequest(req, res) {
-    var pathname = url.parse(req.url).pathname
-    res.writeHead(200, {'Content-Type': 'text/pain'})
-    res.write(route(handle, pathname))
-    res.end()
+  function onRequest(request, response) {
+    var pathname = url.parse(request.url).pathname
+    var postData = ''
+    if (pathname !== '/favicon.ico') {
+      console.log('request for ' + pathname)
+      request.setEncoding('utf-8')
+      request.on('data', function (postDataChuck) {
+        postData += postDataChuck
+        console.log('post data chuck ' + postDataChuck)
+      })
+      request.on('end', function () {
+        route(handle, pathname, response, postData)
+      })
+    }
   }
 
   var server = http.createServer(onRequest)
